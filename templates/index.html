@@ -1,0 +1,55 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sign Language Transaltor</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+        <style>
+            body{
+                font-family: tahoma;
+                background-image: linear-gradient(135deg, #631968, #af1c50, #dd1e3f);
+            }
+            #bg{
+                width: auto;
+                height: auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 25px;
+                box-shadow: 0 0 .2rem #fff,
+                            0 0 .2rem #fff,
+                            0 0 2rem #641967,
+                            0 0 0.8rem #641967,
+                            0 0 2.8rem #641967,
+                            inset 0 0 1.3rem #641967;
+            }
+            #header1{
+                text-align: center;
+                font-size: 52px;
+                font-weight: bold;
+                text-transform: capitalize;
+                color: aliceblue;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+            #wave{
+                width: 100%;
+                height: auto;
+            }
+
+            .container{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 50px;
+            }
+        </style>
+    </head>
+    <body >
+        <h1 id="header1">Translate your sign langauge</h1>
+        <div class="container">
+            <img id="bg" src="{{ url_for('video_feed') }}" class="img-responsive">
+        </div>
+    </body>
+</html>
+
+
