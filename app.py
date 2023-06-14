@@ -1,19 +1,13 @@
 from flask import Flask, render_template, Response
 import time
-import os
-import jyserver.Flask as jsf
 import cv2
 import mediapipe as mp
 import math
-from PIL import Image
-import tensorflow as tf
 import numpy as np
-from tensorflow.keras.models import load_model
+from keras.models import load_model
 from keras.applications.vgg16 import preprocess_input
-from tensorflow.keras.preprocessing import image
-import matplotlib.pyplot as plt
-from tensorflow.keras.preprocessing.image import ImageDataGenerator , img_to_array, load_img
-from tensorflow.keras.optimizers import RMSprop
+from keras.preprocessing.image import img_to_array
+
 
 # Class hands
 class HandDetector:
@@ -164,20 +158,22 @@ class HandDetector:
 
 
 
-#Camera file
-train = ImageDataGenerator(rescale = 1./255
-)
-validation = ImageDataGenerator(rescale = 1./255)
-train_dataset = train.flow_from_directory('./data/trainSet',
-                                         target_size = (350,350),
-                                         batch_size = 32,
-                                         class_mode = "categorical")
-validation_dataset = validation.flow_from_directory('./data/validSet',
-                                                   target_size = (350,350),
-                                                   batch_size = 32,
-                                                   class_mode = "categorical")
-train_dataset.class_indices
-dic = list(train_dataset.class_indices)
+
+dic = ['drink',
+ 'food',
+ 'full',
+ 'have',
+ 'hello',
+ 'i',
+ 'i love you',
+ 'police',
+ 'prefer',
+ 'shirt',
+ 'telephone',
+ 'water',
+ 'wrong',
+ 'yes',
+ 'you']
 
 
 offset = 10
@@ -246,24 +242,17 @@ class VideoCamera(object):
                 result = result * 100000000
                 maxVal = (result[0].max()/sum(result[0])) * 100
                 if(maxVal > 99.9999999):
-                    cv2.putText(imgOutput, dic[result.argmax()],(x,y-20), cv2.FONT_HERSHEY_COMPLEX,2,(255,0,255),2)
+                    cv2.putText(imgOutput, dic[result.argmax()],(x,y-20), cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,255),2)
                     # cv2.imshow(f"ImageCrop", imgCrop)
                 else:
-                    cv2.putText(imgOutput, "",(x,y-20), cv2.FONT_HERSHEY_COMPLEX,2,(255,0,255),2)
+                    cv2.putText(imgOutput, "",(x,y-20), cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,255),2)
                     # cv2.imshow(f"ImageCrop", imgCrop)
             else:
-                cv2.putText(imgOutput, word,(x,y-20), cv2.FONT_HERSHEY_COMPLEX,2,(255,0,255),2)
+                cv2.putText(imgOutput, oldWord,(x,y-20), cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,255),2)
 
-            result = model.predict(imgWhite)
 
             cv2.rectangle(imgOutput, (x-offset, y-offset),
-                          (x + w+offset, y + h+offset), (255, 0, 255), 4)
-            
-
-            cv2.putText(imgOutput, dic[result.argmax()],(x,y-20), cv2.FONT_HERSHEY_COMPLEX,2,(255,0,255),2)           
-            # cv2.imshow(f"ImageCrop", imgCrop)
-            # cv2.imshow(f"imgWhite", imgWhiteCopy)
-
+                                    (x + w+offset, y + h+offset), (255, 0, 255), 4)
 
         ret, jpeg = cv2.imencode('.jpg',imgOutput)
         return jpeg.tobytes()
